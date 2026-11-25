@@ -403,7 +403,7 @@ function bind(id,fn){const b=document.getElementById(id);if(b)b.onclick=fn;}
 function showTitle(){
   if(G)G.mode='menu';
   const ctl=touch?'اللمس: الأزرار على الشاشة.':'الحركة: الأسهم أو WASD<br>لكمة: J · ركلة: K · حماية: L · نط: مسافة · ضربة خاصة: U<br>اضغط لكمة ثم لكمة ثم لكمة للكومبو. ركلة بعد اللكمات تنهي الكومبو.';
-  show('<h1>صاعد</h1><p class="sub">من تحت لفوق. بالإيد.</p><button class="b" id="s0">ابدأ من الأول</button>'+(best>0?'<button class="b alt" id="s1">كمّل من مرحلة '+(best+1>4?4:best+1)+': '+STAGES[Math.min(best,3)].name+'</button>':'')+'<p class="kb">'+ctl+'</p>');
+  show('<h1>صاعد</h1><p class="sub">من تحت لفوق. بالإيد.</p><button class="b" id="s0">ابدأ من الأول</button>'+(best>0?'<button class="b alt" id="s1">كمّل من مرحلة '+(best+1>4?4:best+1)+': '+STAGES[Math.min(best,3)].name+'</button>':'')+'<p class="kb">'+ctl+'</p><img src="ae.jpg" alt="A&E Studio" style="display:block;margin:16px auto 0;width:120px;border-radius:8px;opacity:.9">');
   bind('s0',()=>{G=null;startStageIntro(0);});bind('s1',()=>{G=null;startStageIntro(Math.min(best,3));});
 }
 function startStageIntro(i){
