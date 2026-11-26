@@ -43,7 +43,21 @@ button,input{font-family:inherit}
   var KEY="chairman-lang";
   var FOOT={ar:"لعبة حكاية وقرارات. كل الأسماء والأحداث خيال.",en:"A story and decisions game. All names and events are fiction."};
   var OTHER={ar:"English",en:"العربية"};
+  var TAGS={"أسطورة":"Legend","بداية":"The start","بعد الخسارة":"After the Loss","رئيس النادي":"Club President","عضو تحت السن":"Junior Member","عضو مجلس":"Board member","لاعب أول فريق":"First-team player","مرشح":"Candidate","مرشح للرئاسة":"Presidential Candidate","مصاب":"Injured","معتزل":"Retired","موظف إدارة":"Administration clerk","نائب رئيس":"Vice President","ناشئ":"Youth player","نجم الفريق":"Star of the Team"};
+  function migrateTag(lang){
+    try{
+      var raw=localStorage.getItem("chairman-save.v1");
+      if(!raw)return;
+      var sv=JSON.parse(raw);
+      if(!sv||!sv.tag)return;
+      for(var ar in TAGS){var en=TAGS[ar];
+        if(lang==="en"&&sv.tag===ar)sv.tag=en;
+        else if(lang==="ar"&&sv.tag===en)sv.tag=ar;}
+      localStorage.setItem("chairman-save.v1",JSON.stringify(sv));
+    }catch(e){}
+  }
   function start(lang){
+    migrateTag(lang);
     try{localStorage.setItem(KEY,lang);}catch(e){}
     document.documentElement.lang=lang;
     document.documentElement.dir=lang==="ar"?"rtl":"ltr";
