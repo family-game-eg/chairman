@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>THE CHAIRMAN</title>
-<meta name="description" content="THE CHAIRMAN: Rise to Glory. لعبة قصص تفاعلية بالعربي. الجزء الأول.">
+<meta name="description" content="THE CHAIRMAN: a free interactive story game. Arabic / English. لعبة قصص تفاعلية مجانية.">
 <meta property="og:title" content="THE CHAIRMAN">
-<meta property="og:description" content="نادي كبير وقع. وحد لازم يرجّعه.">
+<meta property="og:description" content="نادي كبير وقع. وحد لازم يرجّعه. A big club has fallen. Someone has to bring it back.">
 <meta property="og:image" content="https://family-game-eg.github.io/chairman/cover.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -19,14 +19,57 @@ html,body{margin:0;background:#0d0a08;color:#f3ede4;font-family:'Cairo',system-u
 .top h1{font-size:26px;margin:6px 0 2px;color:#d8b25c}
 .foot{text-align:center;color:#8f8377;font-size:12px;margin-top:18px}
 button,input{font-family:inherit}
+#langpick{text-align:center;padding:34px 10px 10px}
+#langpick .lp-title{font-size:15px;color:#cbb9a0;margin-bottom:14px}
+#langpick button{display:block;width:100%;max-width:320px;margin:10px auto;background:#d8b25c;color:#1a140d;border:0;border-radius:8px;padding:14px;font-size:17px;font-weight:700;cursor:pointer;min-height:48px}
+#langpick button.lp-en{background:transparent;color:#d8b25c;border:1px solid #d8b25c}
+#langswitch{position:fixed;top:8px;inset-inline-start:8px;z-index:99;background:rgba(36,29,24,.85);color:#d8b25c;border:1px solid #4a3d30;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
+<button id="langswitch" type="button" style="display:none">English</button>
 <div class="wrap">
 <div class="top"><h1>THE CHAIRMAN</h1></div>
-<div id="root"></div>
-<div class="foot">لعبة حكاية وقرارات. كل الأسماء والأحداث خيال.</div>
+<div id="langpick" style="display:none">
+<div class="lp-title">اختار لغتك · Choose your language</div>
+<button type="button" data-lang="ar">العربية</button>
+<button type="button" data-lang="en" class="lp-en">English</button>
 </div>
-<script src="game.js"></script>
+<div id="root"></div>
+<div class="foot" id="foot">لعبة حكاية وقرارات. كل الأسماء والأحداث خيال.</div>
+</div>
+<script>
+(function(){
+  var KEY="chairman-lang";
+  var FOOT={ar:"لعبة حكاية وقرارات. كل الأسماء والأحداث خيال.",en:"A story and decisions game. All names and events are fiction."};
+  var OTHER={ar:"English",en:"العربية"};
+  function start(lang){
+    try{localStorage.setItem(KEY,lang);}catch(e){}
+    document.documentElement.lang=lang;
+    document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+    document.getElementById("foot").textContent=FOOT[lang];
+    var sw=document.getElementById("langswitch");
+    sw.textContent=OTHER[lang];
+    sw.style.display="block";
+    sw.onclick=function(){
+      try{localStorage.setItem(KEY,lang==="ar"?"en":"ar");}catch(e){}
+      location.reload();
+    };
+    document.getElementById("langpick").style.display="none";
+    var s=document.createElement("script");
+    s.src=lang==="ar"?"game.js":"game-en.js";
+    document.body.appendChild(s);
+  }
+  var saved=null;
+  try{saved=localStorage.getItem(KEY);}catch(e){}
+  if(saved==="ar"||saved==="en"){start(saved);}
+  else{
+    var lp=document.getElementById("langpick");
+    lp.style.display="block";
+    var btns=lp.querySelectorAll("button[data-lang]");
+    for(var i=0;i<btns.length;i++){btns[i].onclick=function(){start(this.getAttribute("data-lang"));};}    
+  }
+})();
+</script>
 </body>
 </html>
